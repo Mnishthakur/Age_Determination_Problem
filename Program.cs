@@ -1,6 +1,13 @@
 namespace Age_Determination_Problem
 {
-    public class AgeCategorizer
+    public class InvalidAgeException : Exception
+{
+    public InvalidAgeException() : base("Invalid age entered.")
+    {
+    }
+}
+
+public class AgeCategorizer
 {
     public static string CategorizeAge(int age)
     {
@@ -13,7 +20,7 @@ namespace Age_Determination_Problem
         else if (age >= 65)
             return "Seniors";
         else
-            throw new ArgumentNullException("age", "Age cannot be null.");
+            throw new InvalidAgeException();
     }
 
     public static void Main()
@@ -23,14 +30,12 @@ namespace Age_Determination_Problem
 
         if (string.IsNullOrEmpty(input))
         {
-            Console.WriteLine("Age cannot be empty.");
-            return;
+            throw new InvalidAgeException("Age cannot be null or empty.");
         }
 
         if (!int.TryParse(input, out int age))
         {
-            Console.WriteLine("Invalid age entered.");
-            return;
+            throw new InvalidAgeException();
         }
 
         try
@@ -38,10 +43,11 @@ namespace Age_Determination_Problem
             string category = CategorizeAge(age);
             Console.WriteLine("Person's category: " + category);
         }
-        catch (ArgumentNullException ex)
+        catch (InvalidAgeException ex)
         {
             Console.WriteLine(ex.Message);
         }
     }
 }
+
 }
